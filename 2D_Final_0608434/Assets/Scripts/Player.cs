@@ -11,6 +11,17 @@ public class Player : MonoBehaviour
     public FixedJoystick joystick;
     public Transform tra;
     public Animator ani;
+    public float rangeAttack = 2.5f;
+    public AudioSource aud;
+    public AudioClip soundAttack;
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.2f);
+        Gizmos.DrawSphere(transform.position, rangeAttack);
+  
+    }
 
     private void Move ()
     {
@@ -20,8 +31,13 @@ public class Player : MonoBehaviour
         ani.SetFloat("水平",h);
 
     }
-    private void Attack()
+    public void Attack()
     {
+        aud.PlayOneShot(soundAttack, 1.2f);
+
+        RaycastHit2D hit=Physics2D.CircleCast(transform.position, rangeAttack, -transform.up,0,1<<8);
+
+        if (hit.collider.tag == "敵人") Destroy(hit.collider.gameObject);
 
     }
     private void Hit()
