@@ -69,6 +69,9 @@ public class Enemy : MonoBehaviour
         if (timer >= cdAttack)
         {
             timer = 0;
+            Collider2D hit= Physics2D.OverlapCircle(transform.position, rangeAttack);
+            hit.GetComponent<Player>().Hit(attack);
+
         }
 
     }

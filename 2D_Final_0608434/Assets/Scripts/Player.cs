@@ -14,6 +14,15 @@ public class Player : MonoBehaviour
     public float rangeAttack = 2.5f;
     public AudioSource aud;
     public AudioClip soundAttack;
+    public float hp = 200;
+    public HpManager hpManager;
+
+
+
+    private float hpMax;
+
+
+
 
 
     private void OnDrawGizmos()
@@ -39,9 +48,12 @@ public class Player : MonoBehaviour
 
         //if (hit.collider.tag == "敵人") Destroy(hit.collider.gameObject);
 
-    }
-    private void Hit()
+    } 
+    public void Hit(float damage)
     {
+        hp -= damage;
+        hpManager.UpdateHpBar(hp, hpMax);
+        StartCoroutine(hpManager.ShowDamage());
 
     }
     private void Dead()
@@ -51,7 +63,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        
+        hpMax = hp;
     }
 
     private void Update()
