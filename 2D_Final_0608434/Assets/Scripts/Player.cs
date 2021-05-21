@@ -33,11 +33,11 @@ public class Player : MonoBehaviour
     }
     public void Attack()
     {
-        aud.PlayOneShot(soundAttack, 1.2f);
+        aud.PlayOneShot(soundAttack, 0.02f);
 
         RaycastHit2D hit=Physics2D.CircleCast(transform.position, rangeAttack, -transform.up,0,1<<8);
 
-        if (hit.collider.tag == "敵人") Destroy(hit.collider.gameObject);
+        //if (hit.collider.tag == "敵人") Destroy(hit.collider.gameObject);
 
     }
     private void Hit()
