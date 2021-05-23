@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
 
     [Range(0,300)]
     public float speed = 10.5f;
-    public bool isDead = false;
     public string cName = "主角";
-
     public FixedJoystick joystick;
     public Transform tra;
     public Animator ani;
@@ -16,10 +15,12 @@ public class Player : MonoBehaviour
     public AudioClip soundAttack;
     public float hp = 200;
     public HpManager hpManager;
-
-
-
     private float hpMax;
+    private bool isDead = false;
+
+    [Range(0, 1000)]
+    public float attack = 20;
+
 
 
 
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
 
     private void Move ()
     {
+        if (isDead) return;
 
         float h = joystick.Horizontal;
         tra.Translate(h * speed * Time.deltaTime, 0, 0);
@@ -42,24 +44,37 @@ public class Player : MonoBehaviour
     }
     public void Attack()
     {
+        if (isDead) return;
+
+
         aud.PlayOneShot(soundAttack, 0.02f);
 
         RaycastHit2D hit=Physics2D.CircleCast(transform.position, rangeAttack, -transform.up,0,1<<8);
 
-        //if (hit.collider.tag == "敵人") Destroy(hit.collider.gameObject);
+        if (hit.collider.tag == "敵人") hit.collider.GetComponent<Enemy>().Hit(attack);
 
     } 
     public void Hit(float damage)
     {
         hp -= damage;
         hpManager.UpdateHpBar(hp, hpMax);
-        StartCoroutine(hpManager.ShowDamage());
+        StartCoroutine(hpManager.ShowDamage(damage));
+
+        if (hp <= 0) Dead();
 
     }
     private void Dead()
     {
-
+        hp = 0;
+        isDead = true;
+        Invoke("Replay",2);
+        
     }
+    private void Replay()
+    {
+        SceneManager.LoadScene("格鬥遊戲");
+    }
+
 
     private void Start()
     {

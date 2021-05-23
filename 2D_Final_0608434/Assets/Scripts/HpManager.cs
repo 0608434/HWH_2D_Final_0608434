@@ -16,10 +16,11 @@ public class HpManager : MonoBehaviour
     }
 
 
-    public IEnumerator ShowDamage()
+    public IEnumerator ShowDamage(float damage)
     {
         RectTransform rect =Instantiate(rectDamage, transform);
         rect.anchoredPosition = new Vector2(0, -240);
+        rect.GetComponent<Text>().text = damage.ToString();
 
         float y = rect.anchoredPosition.y;
         while (y<-100)
@@ -30,7 +31,7 @@ public class HpManager : MonoBehaviour
 
 
         }
-
+        Destroy(rect.gameObject);
     }
 
 }
